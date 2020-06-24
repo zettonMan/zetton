@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org">
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,9 +11,17 @@
 </head>
 <body class="gray-bg">
 <div class="wrapper wrapper-content animated fadeInRight">
-    <div class="ibox-content">
-        <h3>欢迎您！</h3>
-    </div>
+    <shiro:user>
+        欢迎<shiro:principal property="name"/>
+    </shiro:user>
+    <p shiro:user="">
+        Welcome back John! Not John? Click <a href="login.html">here</a> to login.
+    </p>
+    <p shiro:notAuthenticated="">
+        未身份验证（包括记住我）
+    </p>
+    <p shiro:guest=""><span style="white-space:pre;"> </span>Please <a href="login.html">login5555</a> </p>
+
 </div>
 </body>
 </html>

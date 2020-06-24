@@ -48,7 +48,7 @@ public class ShiroConfig {
 
     //注入异常处理类
     @Bean
-    public NoAuthExceptionResolver myExceptionResolver() {
+    public NoAuthExceptionResolver noAuthExceptionResolver() {
         return new NoAuthExceptionResolver();
     }
 
@@ -120,7 +120,7 @@ public class ShiroConfig {
         // 登录成功后要跳转的链接
         shiroFilterFactoryBean.setSuccessUrl("/index");
         // 未授权界面，不生效(详情原因看NoAuthExceptionResolver)
-        shiroFilterFactoryBean.setUnauthorizedUrl("/errorView/403_error.html");
+        shiroFilterFactoryBean.setUnauthorizedUrl("/error/403");
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
         return shiroFilterFactoryBean;
     }

@@ -6,6 +6,7 @@ import com.zetton.thymeleaf.service.ManagerInfoService;
 import com.zetton.thymeleaf.shiro.ShiroKit;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.UnknownAccountException;
+import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -97,6 +98,7 @@ public class IndexController {
      * @return
      */
     @RequestMapping("/welcome")
+    @RequiresRoles("admin")
     public String welcome(HttpServletRequest request, Model model) {
         return "modules/common/welcome";
     }
