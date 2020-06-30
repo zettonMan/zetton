@@ -36,7 +36,7 @@ public class IndexController {
 
     //登录页(shiro配置需要两个/login 接口,一个是get用来获取登陆页面,一个用post用于登录)
     @RequestMapping(value = "/login", method = RequestMethod.GET)
-    public String login() {
+    public String loginPage() {
         if (ShiroKit.isAuthenticated()) {
             return "redirect:/";
         }
@@ -77,10 +77,10 @@ public class IndexController {
      * @param model
      * @return
      */
-    @RequestMapping(value = {"/", "/index"})
+    @RequestMapping(value= {"/", "/index"},method= RequestMethod.GET)
     public String index(HttpSession session, Model model) {
         // _logger.info("访问首页start...");
-        // 做一些其他事情，比如把项目的数量放到session中
+        // 做一些其他事情，permission:aix比如把项目的数量放到session中
         if (ShiroKit.hasRole("admin") && session.getAttribute("projectNum") == null) {
             session.setAttribute("projectNum", 2);
         }
@@ -97,7 +97,7 @@ public class IndexController {
      * @param model
      * @return
      */
-    @RequestMapping("/welcome")
+    @RequestMapping(value= "/welcome",method= RequestMethod.GET)
     @RequiresRoles("admin")
     public String welcome(HttpServletRequest request, Model model) {
         return "modules/common/welcome";

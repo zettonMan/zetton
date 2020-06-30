@@ -34,3 +34,5 @@ mybatis-plus:
 logging:
   level:
     org.springframework.web.servlet: ERROR
+cxf:
+  path: /services

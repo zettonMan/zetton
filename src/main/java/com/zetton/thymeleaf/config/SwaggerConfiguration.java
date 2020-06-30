@@ -1,6 +1,7 @@
 package com.zetton.thymeleaf.config;
 
 
+import com.google.common.collect.Sets;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import springfox.documentation.builders.ApiInfoBuilder;
@@ -19,19 +20,26 @@ public class SwaggerConfiguration {
     @Bean
     public Docket createRestApi() {
         return new Docket(DocumentationType.SWAGGER_2)
+                .produces(Sets.newHashSet("application/json"))
+                .consumes(Sets.newHashSet("application/json"))
+                .protocols(Sets.newHashSet("http", "https"))
+                .apiInfo(apiInfo())
+                .forCodeGeneration(true)
+                .useDefaultResponseMessages(false)
                 .select()
                 .apis(RequestHandlerSelectors.basePackage("com.zetton.thymeleaf.controller"))
                 .paths(PathSelectors.any())
-                .build()
-                .apiInfo(apiInfo());
+                .build();
     }
     private ApiInfo apiInfo(){
         return new ApiInfoBuilder()
-                .title("多数据源 SSM 测试服务")
-                .description("多数据源 SSM 测试文档")
-                .termsOfServiceUrl("http://www.seawaterbt.com")
-                //.contact(new Contact("海水不甜","http://www.seawaterbt.com","809318068@qq.com"))
+                .title("测试服务")
+                .description("测试文档简要描述")
+                //.termsOfServiceUrl("http://www.seawaterbt.com")
                 .version("1.0")
+                .license("MIT 协议")
+                .licenseUrl("http://www.opensource.org/licenses/MIT")
+                .contact(new Contact("zetton", "https://github.com/zettonMan", "wywangsz@163.com"))
                 .build();
     }
 

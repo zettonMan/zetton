@@ -12,7 +12,7 @@
 <body class="gray-bg">
 <div class="wrapper wrapper-content animated fadeInRight">
     <shiro:user>
-        欢迎<shiro:principal property="name"/>
+        欢迎<shiro:principal property="name"/>，代办项目<span th:text="${session.projectNum}"></span>
     </shiro:user>
     <p shiro:user="">
         Welcome back John! Not John? Click <a href="login.html">here</a> to login.

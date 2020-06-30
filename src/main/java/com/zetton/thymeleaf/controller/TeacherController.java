@@ -6,15 +6,17 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.zetton.thymeleaf.entity.Teacher;
 import com.zetton.thymeleaf.service.TeacherService;
 import com.zetton.thymeleaf.vo.TeacherVo;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Api("对老师表CRUD")
+@Api(value = "对老师表CRUD")
+@ApiResponses(value={
+        @ApiResponse(code=200,message = "成功"),
+        @ApiResponse(code=400,message = "失败")
+})
 @RestController
 @RequestMapping("/teacher")
 public class TeacherController {
@@ -22,7 +24,7 @@ public class TeacherController {
     @Autowired
     private TeacherService teacherService;
 
-    @ApiOperation(value = "添加老师")
+    @ApiOperation(value = "添加老师", tags = "老师管理业务接口")
     @PostMapping("/add")
     public String add(@RequestBody TeacherVo teacher){
         Teacher tea = new Teacher();
@@ -32,13 +34,13 @@ public class TeacherController {
         return teacherService.save(tea)?"添加成功":"添加失败";
     }
 
-    @ApiOperation("删除老师")
+    @ApiOperation(value = "删除老师",notes = "删除操作")
     @DeleteMapping("/delete/{id}")
     public String delete(@ApiParam("老师的主键id")@PathVariable(value = "id") Integer id){
         return teacherService.removeById(id)?"删除成功":"删除失败";
     }
 
-    @ApiOperation("修改老师")
+    @ApiOperation(value = "修改老师", produces ="application/json")
     @PostMapping("/update")
     public String update(@RequestBody Teacher teacher){
         return teacherService.updateById(teacher)?"修改成功":"修改失败";
@@ -53,7 +55,7 @@ public class TeacherController {
 
     @ApiOperation(value = "查询指定老师")
     @GetMapping("/getById/{id}")
-    public Teacher list(@ApiParam("老师的主键id")@PathVariable(value = "id") Integer id){
+    public Teacher queryTeacherById(@ApiParam("老师的主键id")@PathVariable(value = "id") Integer id){
         return teacherService.getById(id);
     }
 }

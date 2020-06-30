@@ -113,6 +113,8 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/swagger-ui.html", "anon");
 
         // 其他的
+        filterChainDefinitionMap.put("/services/CommonService/**", "anon");
+
         filterChainDefinitionMap.put("/**", "authc");
 
         // 如果不设置默认会自动寻找Web工程根目录下的"/login.jsp"页面
