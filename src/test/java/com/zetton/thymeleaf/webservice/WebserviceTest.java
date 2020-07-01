@@ -2,6 +2,7 @@ package com.zetton.thymeleaf.webservice;
 
 import com.zetton.thymeleaf.entity.Teacher;
 import com.zetton.thymeleaf.webserviceClient.CommonServiceImplService;
+import com.zetton.thymeleaf.webserviceClient.CommonServiceImplServiceLocal;
 import org.apache.cxf.endpoint.Client;
 import org.apache.cxf.jaxws.JaxWsProxyFactoryBean;
 import org.apache.cxf.jaxws.endpoint.dynamic.JaxWsDynamicClientFactory;
@@ -96,9 +97,20 @@ public class WebserviceTest {
       */
      @Test
      public void cl4() {
-         CommonServiceImplService c = new CommonServiceImplService();
+         CommonServiceImplServiceLocal c = new CommonServiceImplServiceLocal();
          com.zetton.thymeleaf.webserviceClient.Teacher t = c.getCommonServicePort().getTeacher("Tom");
          Assert.assertEquals(t.getName(), "Tom");
          System.out.println("Teacher.name=" + t.getName());
      }
+
+    /**
+     * 方式4. 客户端代码生成方式
+     */
+    @Test
+    public void cl5() {
+        CommonServiceImplService c = new CommonServiceImplService();
+        com.zetton.thymeleaf.webserviceClient.Teacher t = c.getCommonServicePort().getTeacher("Tom");
+        Assert.assertEquals(t.getName(), "Tom");
+        System.out.println("Teacher.name=" + t.getName());
+    }
 }

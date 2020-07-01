@@ -1,5 +1,10 @@
 server:
   port: 8082
+  servlet:
+    session:
+      tracking-modes: cookie
+      cookie:
+        http-only: true
 spring:
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource

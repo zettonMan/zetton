@@ -11,7 +11,7 @@ import java.util.Date;
 @Component
 public class ScheduleJob {
     private Logger logger = LoggerFactory.getLogger(ScheduleJob.class);
-    public final static long ONE_MINUTE =  60 * 1000;
+    public final static long ONE_MINUTE =  24 * 60 * 1000;
 
     @Scheduled(fixedDelay=ONE_MINUTE)
     public void fixedDelayJob() throws InterruptedException {
@@ -34,7 +34,7 @@ public class ScheduleJob {
      * 第六位，星期，取值1-7，1表示星期天，2表示星期一
      * 第七位，年份，可以留空，取值1970-2099
      */
-    @Scheduled(cron="0 2/2 * * * ?")
+    @Scheduled(cron="0 0 * 1 * ?")
     public void cronJob(){
         logger.info(DateUtil.formatDateTime(new Date())+" >>cron执行....");
     }

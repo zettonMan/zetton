@@ -18,7 +18,7 @@ import javax.xml.ws.WebServiceFeature;
  * 
  */
 @WebServiceClient(name = "CommonServiceImplService", targetNamespace = "http://entity.thymeleaf.zetton.com/", wsdlLocation = "http://localhost:8082/zetton/services/CommonService?wsdl")
-public class CommonServiceImplService
+public class CommonServiceImplServiceLocal
     extends Service
 {
 
@@ -38,27 +38,27 @@ public class CommonServiceImplService
         COMMONSERVICEIMPLSERVICE_EXCEPTION = e;
     }
 
-    public CommonServiceImplService() {
+    public CommonServiceImplServiceLocal() {
         super(__getWsdlLocation(), COMMONSERVICEIMPLSERVICE_QNAME);
     }
 
-    public CommonServiceImplService(WebServiceFeature... features) {
+    public CommonServiceImplServiceLocal(WebServiceFeature... features) {
         super(__getWsdlLocation(), COMMONSERVICEIMPLSERVICE_QNAME, features);
     }
 
-    public CommonServiceImplService(URL wsdlLocation) {
+    public CommonServiceImplServiceLocal(URL wsdlLocation) {
         super(wsdlLocation, COMMONSERVICEIMPLSERVICE_QNAME);
     }
 
-    public CommonServiceImplService(URL wsdlLocation, WebServiceFeature... features) {
+    public CommonServiceImplServiceLocal(URL wsdlLocation, WebServiceFeature... features) {
         super(wsdlLocation, COMMONSERVICEIMPLSERVICE_QNAME, features);
     }
 
-    public CommonServiceImplService(URL wsdlLocation, QName serviceName) {
+    public CommonServiceImplServiceLocal(URL wsdlLocation, QName serviceName) {
         super(wsdlLocation, serviceName);
     }
 
-    public CommonServiceImplService(URL wsdlLocation, QName serviceName, WebServiceFeature... features) {
+    public CommonServiceImplServiceLocal(URL wsdlLocation, QName serviceName, WebServiceFeature... features) {
         super(wsdlLocation, serviceName, features);
     }
 
