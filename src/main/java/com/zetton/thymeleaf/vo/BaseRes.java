@@ -1,20 +1,21 @@
 package com.zetton.thymeleaf.vo;
 
+import cn.hutool.json.JSONSupport;
 import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
+import lombok.Data;
 
 /**
  * API接口的基础返回类
  *
  * @version 1.0
  */
-@NoArgsConstructor
+@Data
 @AllArgsConstructor
-public class BaseRes<T> {
+public class BaseRes<T> extends JSONSupport {
     /**
      * 是否成功
      */
-    private boolean success;
+    private Integer resCode;
 
     /**
      * 说明

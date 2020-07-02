@@ -14,8 +14,8 @@
     <shiro:user>
         欢迎<shiro:principal property="name"/>，代办项目<span th:text="${session.projectNum}"></span>
     </shiro:user>
-    <p shiro:user="">
-        Welcome back John! Not John? Click <a href="login.html">here</a> to login.
+    <p shiro:user="aix">
+        Welcome back John! Not John? Click <a href="websocket">here</a> to login.
     </p>
     <p shiro:notAuthenticated="">
         未身份验证（包括记住我）

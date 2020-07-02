@@ -103,4 +103,16 @@ public class IndexController {
         return "modules/common/welcome";
     }
 
+    /**
+     * 欢迎页面
+     * @param request
+     * @param model
+     * @return
+     */
+    @RequestMapping(value= "/websocket",method= RequestMethod.GET)
+    @RequiresRoles("admin")
+    public String websocket(HttpServletRequest request, Model model) {
+        return "modules/common/websocket";
+    }
+
 }
