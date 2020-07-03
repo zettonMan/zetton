@@ -41,7 +41,20 @@
 
     <update id="updateById" parameterType="com.zetton.thymeleaf.entity.ManagerInfo">
         UPDATE t_manager
-            SET username= #{et.username}
-            WHERE id= #{et.id}
+        <set>
+            <if test="#{et.username} != null and #{et.username} != ''"> username= #{et.username},</if>
+            <if test="#{et.password} != null and #{et.password} != ''"> password= #{et.password},</if>
+        </set>
+        WHERE id= #{et.id}
     </update>
+
+    <insert id="insert" parameterType="com.zetton.thymeleaf.entity.ManagerInfo">
+        insert into t_manager (id, username, password)
+            value (#{id}, #{username}, #{password})
+    </insert>
+
+    <delete id="deleteById">
+        delete from t_manager
+            where  id= #{id}
+    </delete>
 </mapper>

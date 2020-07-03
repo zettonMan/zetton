@@ -4,6 +4,24 @@ server:
 spring:
   profiles:
     active: dev
+  cache:
+    type: REDIS
+    redis:
+      cache-null-values: false
+      time-to-live: 600000ms
+      use-key-prefix: true
+    cache-names: userCache,allUsersCache
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    database: 0
+    lettuce:
+      shutdown-timeout: 200ms
+      pool:
+        max-active: 7
+        max-idle: 7
+        min-idle: 2
+        max-wait: -1ms
   resources:
     add-mappings: false
   thymeleaf:
@@ -30,6 +48,7 @@ mybatis-plus:
     lazyLoadingEnabled: true #延时加载的开关
     multipleResultSetsEnabled: true #开启的话，延时加载一个属性时会加载该对象全部属性，否则按需加载属性
     jdbc-type-for-null: 'null' #配置JdbcTypeForNull, oracle数据库必须配置
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 
 logging:
   level:

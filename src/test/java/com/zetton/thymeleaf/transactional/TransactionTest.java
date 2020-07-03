@@ -25,9 +25,10 @@ public class TransactionTest {
         ManagerInfo managerInfo = new ManagerInfo();
         managerInfo.setId(3);
         managerInfo.setUsername("testChange");
-        Assert.assertThrows("runtime-----RollBack", RuntimeException.class, () ->{
+        RuntimeException exception = Assert.assertThrows("runtime-----RollBack", RuntimeException.class, () ->{
             managerInfoService.updateUserError(managerInfo);
         });
+        Assert.assertTrue(exception.getMessage().contains("runtime-----RollBack"));
     }
 
     @Test

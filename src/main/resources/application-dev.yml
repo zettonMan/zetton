@@ -57,6 +57,6 @@ logging:
   level:
     ROOT: INFO
     com:
-      xncoding: DEBUG
+      zetton: DEBUG
   file:
     name: D:/logs/app.log
