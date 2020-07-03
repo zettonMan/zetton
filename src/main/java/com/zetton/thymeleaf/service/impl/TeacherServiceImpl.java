@@ -20,7 +20,7 @@ public class TeacherServiceImpl extends ServiceImpl<TeacherMapper,Teacher> imple
     @Autowired
     TeacherMapper teacherMapper;
 
-    @DataSource(DataSourceEnum.SLAVE)
+    @DataSource(value = DataSourceEnum.SLAVE)
     public int insert(Teacher entity) {
         return teacherMapper.insert(entity);
     }

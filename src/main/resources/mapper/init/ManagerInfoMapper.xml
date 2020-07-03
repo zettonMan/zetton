@@ -38,4 +38,10 @@
         WHERE username=#{username}
         LIMIT 1
     </select>
+
+    <update id="updateById" parameterType="com.zetton.thymeleaf.entity.ManagerInfo">
+        UPDATE t_manager
+            SET username= #{et.username}
+            WHERE id= #{et.id}
+    </update>
 </mapper>
