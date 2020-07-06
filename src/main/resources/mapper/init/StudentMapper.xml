@@ -6,8 +6,9 @@
         <result property="name" column="name"/>
         <result property="age"  column="age"/>
         <result property="className"    column="class_name"/>
+        <result property="birthday"    column="birthday"/>
     </resultMap>
     <select id="getFirstStudent" resultMap="student">
-        select 3,"哈哈", 24 ,"向日葵" from t_student
+        select * from t_student where id = (select max(id) from t_student)
     </select>
 </mapper>
