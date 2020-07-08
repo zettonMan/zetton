@@ -4,24 +4,91 @@
       xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
     <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="hiprint,一个可以跨平台windows,mac,linux运行的js打印插件,打印自动分页">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" th:href="@{/static/favicon.ico}"/>
     <link th:href="@{/static/css/bootstrap.min.css}" rel="stylesheet"/>
     <link th:href="@{/static/css/style.css}" rel="stylesheet"/>
+    <!-- hiprint -->
+    <link th:href="@{/static/hiprint/css/hiprint.css}" rel="stylesheet">
+    <link th:href="@{/static/hiprint/css/print-lock.css}" rel="stylesheet">
+    <link th:href="@{/static/hiprint/css/print-lock.css}" media="print" rel="stylesheet">
 </head>
 <body class="gray-bg">
 <div class="wrapper wrapper-content animated fadeInRight">
     <shiro:user>
         欢迎<shiro:principal property="name"/>，代办项目<span th:text="${session.projectNum}"></span>
     </shiro:user>
-    <p shiro:user="aix">
-        Welcome back John! Not John? Click <a href="websocket">here</a> to login.
+    <p shiro:user>
+        Welcome back <shiro:principal property="name"/>! Not <shiro:principal property="name"/>? Click <a href="websocket">here</a> to login.
     </p>
     <p shiro:notAuthenticated="">
         未身份验证（包括记住我）
     </p>
     <p shiro:guest=""><span style="white-space:pre;"> </span>Please <a href="login.html">login5555</a> </p>
-
 </div>
+<h1 >hiprint 是一款用于web打印的js组件</h1>
+<div id="templateDesignDiv" ></div>
+<a class="btn hiprint-toolbar-item " style="color: #fff;
+    background-color: #d9534f;
+    border-color: #d43f3a;" id="print2">直接打印</a>
+<script th:src="@{/static/hiprint/plugins/jq-3.31.js}" type="text/javascript"></script>
+<!-- polyfill.min.js解决浏览器兼容性问题v6.26.0-->
+<script th:src="@{/static/hiprint/polyfill.min.js}" type="text/javascript"></script>
+<!-- hiprint 核心js-->
+<script th:src="@{/static/hiprint/hiprint.bundle.js}" type="text/javascript"></script>
+<!-- 条形码生成组件-->
+<script th:src="@{/static/hiprint/plugins/JsBarcode.all.min.js}" type="text/javascript"></script>
+<!-- 二维码生成组件-->
+<script th:src="@{/static/hiprint/plugins/qrcode.js}" type="text/javascript"></script>
+<!-- 调用浏览器打印窗口helper类，可自行替换-->
+<script th:src="@{/static/hiprint/plugins/jquery.hiwprint.js}" type="text/javascript"></script>
+<!--直接打印需额外引入socket.io.js 需安装软件-->
+<script th:src="@{/static/hiprint/plugins/socket.io.js}" type="text/javascript"></script>
+<script>
+    $(document).ready(function () {
+        /*<!-- 创建打印模板对象-->
+        var hiprintTemplate = new hiprint.PrintTemplate();
+        <!-- 模板对象添加打印面板 paperHeader：页眉线 paperFooter：页尾线-->
+        var panel = hiprintTemplate.addPrintPanel({ width: 100, height: 130, paperFooter: 340, paperHeader: 10 });
+        <!-- 文本 打印面板添加文本元素-->
+        panel.addPrintText({ options: { width: 140, height: 15, top: 20, left: 20, title: 'hiprint插件手动添加text', textAlign: 'center' } });
+        <!-- 条形码 打印面板添加条形码元素-->
+        panel.addPrintText({ options: { width: 140, height: 35, top: 40, left: 20, title: '123456', textType: 'barcode' } });
+        <!-- 二维码 打印面板添加二维码元素-->
+        panel.addPrintText({ options: { width: 35, height: 35, top: 40, left: 165, title: '二维码', textType: 'qrcode' } });
+        <!-- 长文本 打印面板添加长文本元素-->
+        panel.addPrintLongText({ options: { width: 180, height: 35, top: 90, left: 20, title: '长文本：' } });
+        <!-- 表格 打印面板添加表格元素 content为字符串 -->
+        panel.addPrintTable({ options: { width: 252, height: 35, top: 130, left: 20, content: $('#testTable').html() } });
+        <!-- html 打印面板添加自定义html content为字符串或$('..') -->
+        panel.addPrintHtml({ options: { width: 140, height: 35, top: 180, left: 20, content:'' } });
+        <!-- 竖线 -->
+        panel.addPrintVline({ options: { height: 35, top: 230, left: 20 } });
+        <!-- 横线 -->
+        panel.addPrintHline({ options: { width: 140, top: 245, left: 120 } });
+        <!-- 矩形 -->
+        panel.addPrintRect({ options: { width: 35, height: 35, top: 230, left: 60 } });
+        <!-- 打印设计 -->
+        hiprintTemplate.design('#templateDesignDiv');*/
+        //初始化打印插件
+        hiprint.init();
+        var hiprintTemplate2 = new hiprint.PrintTemplate();
+        var panel = hiprintTemplate2.addPrintPanel({ width: 100, height: 130, paperFooter: 340, paperHeader: 10 });
+        panel.addPrintText({ options: { width: 140, height: 15, top: 20, left: 20, title: 'hiprint插件手动添加text', textAlign: 'center' } });
+        $('#print2').click(function () {
+            hiprintTemplate2.print2({}, { printer:'Fax', title: 'hiprint测试打印' });
+        });
+    });
+    var createPrintHtml = function (printers) {
+        var ul = $('<select></select>');
+        $.each(printers, function (index, printer) {
+            ul.append('<option value="' + printer.name + '" ' + (printer.isDefault ? 'selected' : '') + '>' + printer.name + '</option>');
+        })
+        return ul;
+    }
+</script>
 </body>
 </html>

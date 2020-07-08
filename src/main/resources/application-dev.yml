@@ -1,3 +1,6 @@
+common:
+  location: 1
+  xslDir: E:/
 server:
   port: 8082
   servlet:
@@ -52,7 +55,6 @@ spring:
         wall:
           config:
             multi-statement-allow: true
-
 logging:
   level:
     ROOT: INFO

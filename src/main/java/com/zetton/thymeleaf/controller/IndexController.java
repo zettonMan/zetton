@@ -2,6 +2,9 @@ package com.zetton.thymeleaf.controller;
 
 import com.zetton.thymeleaf.common.exception.ForbiddenUserException;
 import com.zetton.thymeleaf.common.exception.IncorrectCaptchaException;
+import com.zetton.thymeleaf.request.TicketRequest;
+import com.zetton.thymeleaf.response.OrderResponse;
+import com.zetton.thymeleaf.response.TicketResponse;
 import com.zetton.thymeleaf.service.ManagerInfoService;
 import com.zetton.thymeleaf.shiro.ShiroKit;
 import org.apache.shiro.authc.IncorrectCredentialsException;
@@ -9,14 +12,16 @@ import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -110,9 +115,19 @@ public class IndexController {
      * @return
      */
     @RequestMapping(value= "/websocket",method= RequestMethod.GET)
-    @RequiresRoles("admin")
     public String websocket(HttpServletRequest request, Model model) {
         return "modules/common/websocket";
     }
 
+    @PostMapping(value = "/test", consumes = { MediaType.APPLICATION_XML_VALUE }, produces = MediaType.APPLICATION_XML_VALUE)
+    @ResponseBody
+    public TicketResponse test(@RequestBody TicketRequest ticketRequest){
+        TicketResponse ticketResponse=new TicketResponse();
+        List<OrderResponse> orders=new ArrayList<OrderResponse>();
+        OrderResponse o=new OrderResponse();
+        o.setMsg("投注成功");
+        orders.add(o);
+        ticketResponse.setOrderList(orders);
+        return ticketResponse;
+    }
 }

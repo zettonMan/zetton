@@ -1,3 +1,11 @@
+###################  自定义配置  ###################
+common:
+  xlsVtoll: /var/xls/
+  xlsCanton: /var/xls/
+  xlsExeOffice: /var/xls/
+  xlsApp: /var/xls/
+  xlsLog: /var/xls/
+
 server:
   servlet:
     context-path: /zetton
@@ -31,6 +39,18 @@ spring:
     content-type: text/html
     cache: false
     encoding: utf-8
+  batch:
+    job:
+      #启动时要执行的job，默认执行全部job
+      names: job1,job2
+      #是否自动执行定义的job，默认是
+      enabled: true
+      #是否初始化Spring Batch的数据库，默认为是
+      initialize-schema: always
+    #设置Spring Batch的数据库表的前缀
+    table-prefix: batch_
+    #设置默认初始化batch的sql文件路径
+    # schema:
 ###################  mybatis-plus配置  ###################
 mybatis-plus:
   # 如果是放在src/main/java目录下 classpath:/com/yourpackage/*/mapper/*Mapper.xml

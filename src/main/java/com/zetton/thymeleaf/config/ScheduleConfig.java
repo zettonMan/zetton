@@ -14,11 +14,11 @@ import java.util.concurrent.Executors;
 public class ScheduleConfig implements SchedulingConfigurer {
     @Override
     public void configureTasks(ScheduledTaskRegistrar scheduledTaskRegistrar) {
-        scheduledTaskRegistrar.setScheduler(taskExecutor());
+        scheduledTaskRegistrar.setScheduler(taskScheduledExecutor());
     }
 
     @Bean
-    public ExecutorService taskExecutor(){
+    public ExecutorService taskScheduledExecutor(){
         return Executors.newScheduledThreadPool(20);
     }
 }
