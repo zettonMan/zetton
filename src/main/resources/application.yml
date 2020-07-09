@@ -46,11 +46,11 @@ spring:
       #是否自动执行定义的job，默认是
       enabled: true
       #是否初始化Spring Batch的数据库，默认为是
-      initialize-schema: always
+    initialize-schema: always
     #设置Spring Batch的数据库表的前缀
     table-prefix: batch_
     #设置默认初始化batch的sql文件路径
-    # schema:
+    schema: classpath:/org/springframework/batch/core/schema-mysql.sql
 ###################  mybatis-plus配置  ###################
 mybatis-plus:
   # 如果是放在src/main/java目录下 classpath:/com/yourpackage/*/mapper/*Mapper.xml
