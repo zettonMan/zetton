@@ -17,9 +17,11 @@ import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.CookieRememberMeManager;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.apache.shiro.web.servlet.SimpleCookie;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 
 import javax.servlet.Filter;
 import java.util.LinkedHashMap;
@@ -27,6 +29,10 @@ import java.util.Map;
 
 @Configuration
 public class ShiroConfig {
+
+    @Autowired
+    @Lazy
+    HashedCredentialsMatcher hashedCredentialsMatcher;
 
     //配置kaptcha图片验证码框架提供的Servlet,,这是个坑,很多人忘记注册(注意)
     @Bean
@@ -128,10 +134,10 @@ public class ShiroConfig {
     }
 
     @Bean
-    public SecurityManager securityManager() {
+    public SecurityManager securityManager(VerifyShiroRealm verifyShiroRealm) {
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
         // 设置realm.
-        securityManager.setRealm(myShiroRealm());
+        securityManager.setRealm(verifyShiroRealm);
         //注入缓存管理器
         securityManager.setCacheManager(ehCacheManager());//这个如果执行多次，也是同样的一个对象;
         //注入记住我管理器;
@@ -143,9 +149,10 @@ public class ShiroConfig {
      * 身份认证realm; (这个需要自己写，账号密码校验；权限等)
      */
     @Bean
-    public VerifyShiroRealm myShiroRealm() {
+    public VerifyShiroRealm verifyShiroRealm(EhCacheManager cacheManager) {
         VerifyShiroRealm verifyShiroRealm = new VerifyShiroRealm();
-        verifyShiroRealm.setCredentialsMatcher(hashedCredentialsMatcher());
+        verifyShiroRealm.setCacheManager(cacheManager);
+        //verifyShiroRealm.setCredentialsMatcher(hashedCredentialsMatcherSelf());
         return verifyShiroRealm;
     }
 
@@ -153,14 +160,13 @@ public class ShiroConfig {
      * 凭证匹配器 （由于我们的密码校验交给Shiro的SimpleAuthenticationInfo进行处理了
      * 所以我们需要修改下doGetAuthenticationInfo中的代码; @return
      */
-    @Bean
-    public HashedCredentialsMatcher hashedCredentialsMatcher() {
-        HashedCredentialsMatcher hashedCredentialsMatcher = new HashedCredentialsMatcher();
+    /*@Bean
+    public HashedCredentialsMatcher hashedCredentialsMatcherSelf() {
         hashedCredentialsMatcher.setHashAlgorithmName(ShiroKit.HASH_ALGORITHM_NAME);// 散列算法:这里使用MD5算法;
         hashedCredentialsMatcher.setHashIterations(ShiroKit.HASH_ITERATIONS);// 散列的次数，比如散列两次，相当于md5(md5(""));
         hashedCredentialsMatcher.setStoredCredentialsHexEncoded(true);//表示是否存储散列后的密码为16进制，需要和生成密码时的一样，默认是base64；
         return hashedCredentialsMatcher;
-    }
+    }*/
 
     /**
      * 开启shiro aop注解支持. 使用代理方式; 所以需要开启代码支持;

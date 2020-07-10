@@ -1,40 +1,45 @@
 package com.zetton.thymeleaf.aop;
 
+import com.zetton.thymeleaf.common.enums.DataSourceEnum;
 import com.zetton.thymeleaf.common.retenion.DataSource;
 import com.zetton.thymeleaf.config.DataSourceContextHolder;
-import org.aspectj.lang.annotation.After;
-import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Before;
-import org.aspectj.lang.annotation.Pointcut;
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.Signature;
+import org.aspectj.lang.annotation.*;
+import org.aspectj.lang.reflect.MethodSignature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
+import java.lang.reflect.Method;
+
 @Aspect
 @Component
-@Order(1) //需要加入切面排序
+// @Order(1) //切面排序
 public class DynamicDataSourceAspect {
     private Logger logger = LoggerFactory.getLogger(DynamicDataSourceAspect.class);
 
     /**
      * 切入点只对@Service注解的类上的@DataSource方法生效
-     * @param DataSource
+     *
      */
-    @Pointcut(value="@within(org.springframework.stereotype.Service) && @annotation(DataSource)" )
-    public void dynamicDataSourcePointCut(DataSource DataSource){}
+    @Pointcut(value="@annotation(com.zetton.thymeleaf.common.retenion.DataSource)" )
+    public void dynamicDataSourcePointCut(){}
 
-    @Before(value = "dynamicDataSourcePointCut(dataSource)")
-    public void switchDataSource(DataSource dataSource) {
-        DataSourceContextHolder.setDataSource(dataSource.value().getValue());
+    @Before("dynamicDataSourcePointCut() && @annotation(dataSource)")
+    public void doBefore(DataSource dataSource){
+        if (dataSource != null) {
+            DataSourceContextHolder.setDataSource(dataSource.value().getValue());
+            logger.debug("设置数据源为：" + dataSource.value().getValue());
+        } else {
+            DataSourceContextHolder.setDataSource(DataSourceEnum.MASTER.getValue());
+            logger.debug("设置数据源为：master");
+        }
     }
 
-    /**
-     * 切点执行完后 切换成主数据库
-     * @param dataSource
-     */
-    @After(value="dynamicDataSourcePointCut(dataSource)")
-    public void after(DataSource dataSource){
+    @After("dynamicDataSourcePointCut()")
+    public void doAfter(){
         DataSourceContextHolder.cleanDataSource();
     }
 }

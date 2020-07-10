@@ -13,14 +13,14 @@ public class ScoreJobListener implements JobExecutionListener {
     @Override
     public void beforeJob(JobExecution jobExecution) {
         startTime = System.currentTimeMillis();
-        String jobName = jobExecution.getJobParameters().getString("input.job.name");
+        String jobName = jobExecution.getJobParameters().getString("input.file.name");
         logger.info("任务-{}处理开始", jobName);
     }
 
     @Override
     public void afterJob(JobExecution jobExecution) {
         endTime = System.currentTimeMillis();
-        String jobName = jobExecution.getJobParameters().getString("input.job.name");
+        String jobName = jobExecution.getJobParameters().getString("input.file.name");
         logger.info("任务-{}处理结束，总耗时=" + (endTime - startTime) + "ms", jobName);
     }
 }

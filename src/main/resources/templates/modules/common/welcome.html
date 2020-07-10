@@ -72,8 +72,8 @@
         hiprintTemplate.design('#templateDesignDiv');*/
         //初始化打印插件
         hiprint.init();
-        var hiprintTemplate2 = new hiprint.PrintTemplate();
-        var panel = hiprintTemplate2.addPrintPanel({ width: 100, height: 130, paperFooter: 340, paperHeader: 10 });
+        let hiprintTemplate2 = new hiprint.PrintTemplate();
+        let panel = hiprintTemplate2.addPrintPanel({ width: 100, height: 130, paperFooter: 340, paperHeader: 10 });
         panel.addPrintText({ options: { width: 140, height: 15, top: 20, left: 20, title: 'hiprint插件手动添加text', textAlign: 'center' } });
         $('#print2').click(function () {
             hiprintTemplate2.print2({}, { printer:'Fax', title: 'hiprint测试打印' });

@@ -1,6 +1,6 @@
 package com.zetton.thymeleaf.config;
 
-import com.alibaba.druid.pool.DruidDataSource;
+import com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceBuilder;
 import com.baomidou.mybatisplus.core.MybatisConfiguration;
 import com.baomidou.mybatisplus.extension.plugins.PaginationInterceptor;
 import com.baomidou.mybatisplus.extension.spring.MybatisSqlSessionFactoryBean;
@@ -14,7 +14,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
-import org.springframework.context.annotation.Profile;
+import org.springframework.core.annotation.Order;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 
 import javax.sql.DataSource;
@@ -33,14 +33,15 @@ public class MyBatisPlusConfiguration {
 
     @Bean("master")
     @ConfigurationProperties(prefix = "spring.datasource.druid.master")
+    @Primary
     public DataSource createMasterDataSource(){
-        return new DruidDataSource();
+        return DruidDataSourceBuilder.create().build();
     }
 
     @Bean("slave")
     @ConfigurationProperties(prefix = "spring.datasource.druid.slave")
     public DataSource createSlaveDataSource(){
-        return new DruidDataSource();
+        return DruidDataSourceBuilder.create().build();
     }
 
     /**
@@ -48,7 +49,6 @@ public class MyBatisPlusConfiguration {
      * @return
      */
     @Bean
-    @Primary
     public DataSource createDynamicDataSource(@Qualifier("master") DataSource master, @Qualifier("slave") DataSource slave){
         DynamicDataSource dynamicDataSource = new DynamicDataSource();
         //配置多数据源
@@ -58,7 +58,7 @@ public class MyBatisPlusConfiguration {
         dynamicDataSource.setTargetDataSources(map);
         //设置默认数据源
         dynamicDataSource.setDefaultTargetDataSource(master);
-        return  dynamicDataSource;
+        return dynamicDataSource;
     }
 
     @Bean("sqlSessionFactory")
@@ -73,10 +73,20 @@ public class MyBatisPlusConfiguration {
         configuration.setMapUnderscoreToCamelCase(true);
         configuration.setCacheEnabled(false);
         sqlSessionFactory.setConfiguration(configuration);
-        /*sqlSessionFactory.setPlugins(new Interceptor[]{ //PerformanceInterceptor(),OptimisticLockerInterceptor()
+        sqlSessionFactory.setPlugins(new Interceptor[]{ //PerformanceInterceptor(),OptimisticLockerInterceptor()
                 paginationInterceptor() //添加分页功能
-        });*/
+        });
         //sqlSessionFactory.setGlobalConfig(globalConfiguration());
         return sqlSessionFactory.getObject();
     }
+
+    /*
+     * 分页插件，自动识别数据库类型
+     * 多租户，请参考官网【插件扩展】
+     */
+    @Bean
+    public PaginationInterceptor paginationInterceptor() {
+        return new PaginationInterceptor();
+    }
+
 }

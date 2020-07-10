@@ -26,7 +26,10 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.core.io.FileSystemResource;
+
+import javax.sql.DataSource;
 
 @Configuration
 @EnableBatchProcessing
@@ -46,6 +49,8 @@ public class ExcelBatchConfig {
         FlatFileItemReader<Score> reader = new FlatFileItemReader<>();
         // reader.setResource(new ClassPathResource(pathToFile));
         reader.setResource(new FileSystemResource(pathToFile));
+        System.out.println("========================="+pathToFile);
+        reader.setEncoding("UTF-8");
         reader.setLineMapper(new DefaultLineMapper<Score>() {
             {
                 setLineTokenizer(new DelimitedLineTokenizer(",") {
@@ -60,6 +65,7 @@ public class ExcelBatchConfig {
                         setTargetType(Score.class);
                     }
                 });
+                afterPropertiesSet();
             }
         });
         return reader;
@@ -99,16 +105,17 @@ public class ExcelBatchConfig {
      * @return
      */
     @Bean(name = "scoreWriter")
-    public ItemWriter<Score> writer(DynamicDataSource dataSource) {
+    public ItemWriter<Score> writer(@Qualifier(value = "master")DataSource dataSource) {
         JdbcBatchItemWriter<Score> writer = new JdbcBatchItemWriter<>();
         //我们使用JDBC批处理的JdbcBatchItemWriter来写数据到数据库
         writer.setItemSqlParameterSourceProvider(new BeanPropertyItemSqlParameterSourceProvider<>());
 
-        String sql = "insert into t_score " + " (id,studentId,score,subject) "
+        String sql = "insert into t_score (id,studentId,score,subject) "
                 + " values(:id,:studentId,:score,:subject)";
         //在此设置要执行批处理的SQL语句
         writer.setSql(sql);
         writer.setDataSource(dataSource);
+        writer.afterPropertiesSet();
         return writer;
     }
 

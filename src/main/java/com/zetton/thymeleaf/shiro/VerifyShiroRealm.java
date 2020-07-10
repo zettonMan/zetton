@@ -19,6 +19,7 @@ import org.apache.shiro.util.ByteSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 
 /**
  * Description  : 身份校验核心类
@@ -28,6 +29,7 @@ public class VerifyShiroRealm extends AuthorizingRealm {
     private static final Logger _logger = LoggerFactory.getLogger(VerifyShiroRealm.class);
 
     @Autowired
+    @Lazy
     ManagerInfoService managerService;
 
     /**

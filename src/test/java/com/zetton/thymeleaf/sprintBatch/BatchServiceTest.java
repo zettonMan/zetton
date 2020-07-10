@@ -9,6 +9,7 @@ import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.JobParametersBuilder;
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -21,15 +22,17 @@ public class BatchServiceTest {
     private JobLauncher jobLauncher;
 
     @Autowired
-    private Job importJob;
+    @Qualifier("scoreJob")
+    private Job scoreJob;
 
     @Test
-    public void testBatch1() throws Exception {
+    public void testBatch() throws Exception {
         JobParameters jobParameters = new JobParametersBuilder()
                 .addLong("time", System.currentTimeMillis())
-                .addString("input.file.name", "E:\\score.xls")
+                .addString("input.file.name", "F:\\score.csv")
                 .toJobParameters();
-        jobLauncher.run(importJob, jobParameters);
-        logger.info("testBatch1执行完成");
+        jobLauncher.run(scoreJob, jobParameters);
+        logger.info("testBatch执行完成");
+        Thread.sleep(2000L);
     }
 }

@@ -10,6 +10,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.transaction.PlatformTransactionManager;
 
+import javax.sql.DataSource;
+
 @Configuration
 @EnableBatchProcessing
 public class CommonBatchConfig {
@@ -33,7 +35,7 @@ public class CommonBatchConfig {
      * @throws Exception
      */
     @Bean
-    public JobRepository batchJobRepository(DynamicDataSource dataSource, PlatformTransactionManager transactionManager) throws Exception {
+    public JobRepository batchJobRepository(DataSource dataSource, PlatformTransactionManager transactionManager) throws Exception {
         JobRepositoryFactoryBean jobRepositoryFactoryBean = new JobRepositoryFactoryBean();
         jobRepositoryFactoryBean.setDataSource(dataSource);
         jobRepositoryFactoryBean.setTransactionManager(transactionManager);
@@ -54,7 +56,7 @@ public class CommonBatchConfig {
      * @throws Exception
      */
     @Bean
-    public SimpleJobLauncher batchJobLauncher(ThreadPoolTaskExecutor taskBatchExecutor, DynamicDataSource dataSource,
+    public SimpleJobLauncher batchJobLauncher(ThreadPoolTaskExecutor taskBatchExecutor, DataSource dataSource,
                                          PlatformTransactionManager transactionManager) throws Exception {
         SimpleJobLauncher jobLauncher = new SimpleJobLauncher();
         jobLauncher.setTaskExecutor(taskBatchExecutor);

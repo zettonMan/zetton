@@ -33,7 +33,7 @@ spring:
   resources:
     add-mappings: false
   thymeleaf:
-    mode: LEGACYHTML5
+    mode: HTML
     prefix: classpath:/templates/
     suffix: .html
     content-type: text/html
