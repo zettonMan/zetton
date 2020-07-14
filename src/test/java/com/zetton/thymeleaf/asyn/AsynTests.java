@@ -24,12 +24,18 @@ public class AsynTests {
     @Test
     public void testAsync() throws InterruptedException, ExecutionException {
         asyncTask.dealNoReturnTask();
-        System.out.println("thread start " + DateUtil.date());
-        Future<String> f = asyncTask.dealHaveReturnTask(5);
-        log.info("主线程执行finished");
+        System.out.println("thread1 start " + DateUtil.date());
+        Future<String> f1 = asyncTask.dealHaveReturnTask(5);
+        log.info("主线程1执行finished");
+        System.out.println("thread2 start " + DateUtil.date());
+        Future<String> f2 = asyncTask.dealHaveReturnTask(5);
+        log.info("主线程2执行finished");
         System.out.println("thread processing " + DateUtil.date());
-        log.info(f.get());
+        log.info(f1.get());
+        log.info(f2.get());
         System.out.println("thread end " + DateUtil.date());
-        Assert.assertEquals(f.get(), "success:" + 5);
+        Assert.assertEquals(f1.get(), "success:" + 5);
+        Assert.assertEquals(f2.get(), "success:" + 5);
+
     }
 }

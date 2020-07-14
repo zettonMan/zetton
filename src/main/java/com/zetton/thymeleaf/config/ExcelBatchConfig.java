@@ -26,7 +26,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.annotation.Order;
 import org.springframework.core.io.FileSystemResource;
 
 import javax.sql.DataSource;
@@ -55,9 +54,7 @@ public class ExcelBatchConfig {
             {
                 setLineTokenizer(new DelimitedLineTokenizer(",") {
                     {
-                        setNames(new String[]{
-                                "id","studentId","score","subject"
-                        });
+                        setNames("id","studentId","score","subject");
                     }
                 });
                 setFieldSetMapper(new BeanWrapperFieldSetMapper<Score>() {
@@ -74,7 +71,7 @@ public class ExcelBatchConfig {
     /**
      * ItemProcessor定义，用来处理数据
      *
-     * @return
+     * @return processor
      */
     @Bean(name = "scoreProcessor")
     public ItemProcessor<Score, Score> processor() {
@@ -100,9 +97,8 @@ public class ExcelBatchConfig {
     /**
      * ItemWriter定义，用来输出数据
      * spring能让容器中已有的Bean以参数的形式注入，Spring Boot已经为我们定义了dataSource
-     *
-     * @param dataSource
-     * @return
+     * @param dataSource 数据源
+     * @return writer
      */
     @Bean(name = "scoreWriter")
     public ItemWriter<Score> writer(@Qualifier(value = "master")DataSource dataSource) {
@@ -124,7 +120,7 @@ public class ExcelBatchConfig {
      *
      * @param jobBuilderFactory
      * @param s1
-     * @return
+     * @return Job
      */
     @Bean(name = "scoreJob")
     public Job scoreJob(JobBuilderFactory jobBuilderFactory, @Qualifier("scoreStep1") Step s1) {

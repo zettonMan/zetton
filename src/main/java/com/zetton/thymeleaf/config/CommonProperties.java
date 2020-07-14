@@ -23,4 +23,5 @@ public class CommonProperties {
      * 文件位置类别 1:文件系统 2:类路径下面
      */
     private Integer location;
+
 }

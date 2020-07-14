@@ -3,6 +3,7 @@ package com.zetton.thymeleaf.config;
 import com.zetton.thymeleaf.common.handler.AsyncExceptionHandler;
 import org.springframework.aop.interceptor.AsyncUncaughtExceptionHandler;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.scheduling.annotation.AsyncConfigurer;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
@@ -17,7 +18,6 @@ import java.util.concurrent.Executor;
     5、ThreadPoolTaskExecutor：最常使用，推荐。其实质是对java.util.concurrent.ThreadPoolExecutor的包装*/
 
 @Configuration
-@EnableAsync
 public class AsyncConfig implements AsyncConfigurer {
 
     @Override
