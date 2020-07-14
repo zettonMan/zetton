@@ -59,31 +59,29 @@ public class BatchServiceTest {
         JobParameters jobParameters1 = new JobParametersBuilder()
                 .addLong("time",System.currentTimeMillis())
                 .addString(KEY_JOB_NAME, "App")
-                .addString(KEY_FILE_NAME, p.getXlsApp())
-                .addString(KEY_VO_NAME, "com.xncoding.trans.modules.zapp.App")
+                .addString(KEY_FILE_NAME, p.getCsvApp())
+                .addString(KEY_VO_NAME, "com.zetton.thymeleaf.entity.App")
                 .addString(KEY_COLUMNS, String.join(",", new String[]{
                         "appid", "zname", "flag"
                 }))
-                .addString(KEY_SQL, "insert into z_test_App (appid, zname, flag) values(:appid, :zname, :flag)")
+                .addString(KEY_SQL, "insert into z_test_app (appid, zname, flag) values(:appid, :zname, :flag)")
                 .toJobParameters();
         jobLauncher.run(commonJob, jobParameters1);
 
         JobParameters jobParameters2 = new JobParametersBuilder()
                 .addLong("time",System.currentTimeMillis())
                 .addString(KEY_JOB_NAME, "Log")
-                .addString(KEY_FILE_NAME, p.getXlsLog())
-                .addString(KEY_VO_NAME, "com.xncoding.trans.modules.zlog.Log")
+                .addString(KEY_FILE_NAME, p.getCsvLog())
+                .addString(KEY_VO_NAME, "com.zetton.thymeleaf.entity.Log")
                 .addString(KEY_COLUMNS, String.join(",", new String[]{
                         "logid", "msg", "logtime"
                 }))
-                .addString(KEY_SQL, "insert into z_test_Log (logid, msg, logtime) values(:logid, :msg, :logtime)")
+                .addString(KEY_SQL, "insert into z_test_log (logid, msg, logtime) values(:logid, :msg, :logtime)")
                 .toJobParameters();
         jobLauncher.run(commonJob, jobParameters2);
 
         logger.info("Main线程执行完成");
 
-        while (true) {
-            Thread.sleep(2000000L);
-        }
+        Thread.sleep(20L);
     }
 }

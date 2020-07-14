@@ -1,10 +1,7 @@
 ###################  自定义配置  ###################
 common:
-  xlsVtoll: /var/xls/
-  xlsCanton: /var/xls/
-  xlsExeOffice: /var/xls/
-  xlsApp: /var/xls/
-  xlsLog: /var/xls/
+  csvApp: F:\app.csv
+  csvLog: F:\log.csv
 
 server:
   servlet:
@@ -17,7 +14,7 @@ spring:
     redis:
       cache-null-values: false
       time-to-live: 600000ms
-      use-key-prefix: true
+      use-key-prefix: on
     cache-names: userCache,allUsersCache
   redis:
     host: 127.0.0.1

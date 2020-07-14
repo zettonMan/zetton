@@ -11,14 +11,14 @@ import org.springframework.stereotype.Component;
 @Setter
 public class CommonProperties {
     /**
-     * excel文件路径，文件名格式为“表名.xls”
+     * excel文件路径，文件名格式为“表名.csv”
      */
-    private String xlsDir;
-    private String xlsScore;
-    private String xlsCanton;
-    private String xlsExeOffice;
-    private String xlsApp;
-    private String xlsLog;
+    private String csvDir;
+    private String csvScore;
+    private String csvCanton;
+    private String csvExeOffice;
+    private String csvApp;
+    private String csvLog;
     /**
      * 文件位置类别 1:文件系统 2:类路径下面
      */

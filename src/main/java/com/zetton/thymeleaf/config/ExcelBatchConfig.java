@@ -1,6 +1,7 @@
 package com.zetton.thymeleaf.config;
 
 import com.zetton.thymeleaf.entity.Score;
+import com.zetton.thymeleaf.listener.CommonJobListener;
 import com.zetton.thymeleaf.listener.ScoreJobListener;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
@@ -29,6 +30,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.FileSystemResource;
 
 import javax.sql.DataSource;
+import java.util.ArrayList;
 
 @Configuration
 @EnableBatchProcessing
@@ -161,6 +163,102 @@ public class ExcelBatchConfig {
 //                .taskExecutor(new SimpleAsyncTaskExecutor()) //设置每个Job通过并发方式执行，一般来讲一个Job就让它串行完成的好
 //                .throttleLimit(10)        //并发任务数为 10,默认为4
                 .build();
+    }
+
+
+    /**
+     * Job定义，我们要实际执行的任务，包含一个或多个Step
+     *
+     * @param jobBuilderFactory
+     * @param
+     * @return Job
+     */
+    @Bean(name = "commonJob")
+    public Job commonJob(JobBuilderFactory jobBuilderFactory, @Qualifier("commonStep1") Step s1) {
+        return jobBuilderFactory.get("commonJob")
+                .incrementer(new RunIdIncrementer())
+                .flow(s1)//为Job指定Step
+                .end()
+                .listener(new CommonJobListener())//绑定监听器CommonJobListener
+                .build();
+    }
+
+    /**
+     * step步骤，包含ItemReader，ItemProcessor和ItemWriter
+     *
+     * @param stepBuilderFactory
+     * @param reader
+     * @param writer
+     * @return
+     */
+    @Bean(name = "commonStep1")
+    public Step commonStep1(StepBuilderFactory stepBuilderFactory,
+                            @Qualifier("commonReader") ItemReader reader,
+                            @Qualifier("commonWriter") ItemWriter writer) {
+        return stepBuilderFactory
+                .get("commonStep1")
+                .chunk(5000)//批处理每次提交5000条数据
+                .reader(reader)//给step绑定reader
+                .processor(new ValidatingItemProcessor())//给step绑定processor
+                .writer(writer)//给step绑定writer
+                .faultTolerant()
+                .retry(Exception.class)   // 重试
+                .noRetry(ParseException.class)
+                .retryLimit(1)           //每条记录重试一次
+                .skip(Exception.class)
+                .skipLimit(200)         //一共允许跳过200次异常
+//                .taskExecutor(new SimpleAsyncTaskExecutor()) //设置每个Job通过并发方式执行，一般来讲一个Job就让它串行完成的好
+//                .throttleLimit(10)        //并发任务数为 10,默认为4
+                .build();
+    }
+
+    @Bean(name = "commonReader")
+    @StepScope
+    public FlatFileItemReader commonReader(@Value("#{jobParameters['input.file.name']}") String pathToFile,
+                                                  @Value("#{jobParameters['input.columns']}") String columns,
+                                                  @Value("#{jobParameters['input.vo.name']}") String name) throws ClassNotFoundException {
+        Class inputClass =  Class.forName(name);
+        FlatFileItemReader reader = new FlatFileItemReader();
+        // reader.setResource(new ClassPathResource(pathToFile));
+        reader.setResource(new FileSystemResource(pathToFile));
+        System.out.println("========================="+pathToFile);
+        reader.setEncoding("UTF-8");
+        reader.setLineMapper(new DefaultLineMapper() {
+            {
+                setLineTokenizer(new DelimitedLineTokenizer(",") {
+                    {
+                        setNames(columns);
+                    }
+                });
+                setFieldSetMapper(new BeanWrapperFieldSetMapper() {
+                    {
+                        setTargetType(inputClass);
+                    }
+                });
+                afterPropertiesSet();
+            }
+        });
+        return reader;
+    }
+
+    /**
+     * ItemWriter定义，用来输出数据
+     * spring能让容器中已有的Bean以参数的形式注入，Spring Boot已经为我们定义了dataSource
+     * @param dataSource 数据源
+     * @return writer
+     */
+    @Bean(name = "commonWriter")
+    @StepScope
+    public ItemWriter commonWriter(@Qualifier(value = "master")DataSource dataSource,
+                                          @Value("#{jobParameters['input.sql']}") String sql) {
+        JdbcBatchItemWriter writer = new JdbcBatchItemWriter();
+        //我们使用JDBC批处理的JdbcBatchItemWriter来写数据到数据库
+        writer.setItemSqlParameterSourceProvider(new BeanPropertyItemSqlParameterSourceProvider<>());
+        //在此设置要执行批处理的SQL语句
+        writer.setSql(sql);
+        writer.setDataSource(dataSource);
+        writer.afterPropertiesSet();
+        return writer;
     }
 
     @Bean

@@ -7,7 +7,7 @@ server:
     session:
       tracking-modes: cookie
       cookie:
-        http-only: true
+        http-only: on
 spring:
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
@@ -17,7 +17,7 @@ spring:
         url: jdbc:mysql://localhost:3308/master?useSSL=false&autoReconnect=true&tinyInt1isBit=false&useUnicode=true&characterEncoding=utf8&serverTimezone=UTC
         username: root
         password:
-        driver-class-name: com.mysql.jdbc.Driver
+        driver-class-name: com.mysql.cj.jdbc.Driver
         # 初始连接数
         initial-size: 10
         # 最小连接数量
@@ -39,7 +39,7 @@ spring:
         url: jdbc:mysql://localhost:3308/slave?useSSL=false&autoReconnect=true&tinyInt1isBit=false&useUnicode=true&characterEncoding=utf8&serverTimezone=UTC
         username: root
         password:
-        driver-class-name: com.mysql.jdbc.Driver
+        driver-class-name: com.mysql.cj.jdbc.Driver
         # 配置获取连接等待超时的时间
         max-wait: 60000
         # 打开PSCache，并且指定每个连接上PSCache的大小
