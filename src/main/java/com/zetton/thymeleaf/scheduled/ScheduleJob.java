@@ -16,13 +16,13 @@ public class ScheduleJob {
     @Scheduled(fixedDelay=ONE_MINUTE)
     public void fixedDelayJob() throws InterruptedException {
         logger.info(DateUtil.formatDateTime(new Date())+" >>fixedDelay执行.... start");
-        Thread.sleep(5000L);
+        Thread.sleep(2000L);
     }
 
     @Scheduled(fixedRate=ONE_MINUTE)
     public void fixedRateJob() throws InterruptedException {
         logger.info(DateUtil.formatDateTime(new Date())+" >>fixedRate执行....");
-        Thread.sleep(8000L);
+        Thread.sleep(3000L);
     }
 
     /**
